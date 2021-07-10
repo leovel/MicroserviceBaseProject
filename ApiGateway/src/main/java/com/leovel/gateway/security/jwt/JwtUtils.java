@@ -1,9 +1,12 @@
 package com.leovel.gateway.security.jwt;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import javax.crypto.SecretKey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +16,14 @@ import org.springframework.stereotype.Component;
 import com.leovel.gateway.common.models.UserDTO;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-
-  @Value("${api.gateway.jwtSecret}")
-  private String jwtSecret;
+  
+//creates a spec-compliant secure-random key:
+  private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512); //or HS384 or HS256
 
   @Value("${api.gateway.jwtExpirationMs}")
   private int jwtExpirationMs;
@@ -42,24 +46,28 @@ public class JwtUtils {
 
   //for retrieving any information from token we will need the secret key
   public Claims getAllClaimsFromToken(String token) {
-      return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+      return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
   }
 
   public String generateJwtToken(UserDTO user) {
     
     Map<String, Object> claims = new HashMap<>();
-    claims.put("role", user.getRole());
+    claims.put("role", Arrays.asList(user.getRole()));
 
     return Jwts.builder().setClaims(claims).setSubject((user.getUsername())).setIssuedAt(new Date())
-        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+        .signWith(key, SignatureAlgorithm.HS512)
         .compact();
   }
 
   public boolean validateJwtToken(String authToken) {
     try {
-      Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+    	Jwts.parserBuilder()
+    	.setSigningKey(key)
+    	.build()
+    	.parseClaimsJws(authToken);
       return true;
-    } catch (SignatureException e) {
+    } catch (SecurityException e) {
       logger.error("Invalid JWT signature: {}", e.getMessage());
     } catch (MalformedJwtException e) {
       logger.error("Invalid JWT token: {}", e.getMessage());
