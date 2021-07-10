@@ -45,10 +45,5 @@ public class UserController {
 	public ResponseEntity<?> existsUserByEmail(@PathVariable String email) {
 		return ResponseEntity.ok(userService.existsUserByEmail(email));
 	}
-	
-	@GetMapping("/role/{name}")
-	public ResponseEntity<?> findRoleByName(@PathVariable String name) {
-		return ResponseEntity.ok(userService.findRoleByName(name));
-	}
 
 }

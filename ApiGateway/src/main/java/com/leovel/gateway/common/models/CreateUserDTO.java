@@ -1,4 +1,4 @@
-package com.leovel.gateway.security.models;
+package com.leovel.gateway.common.models;
 
 import javax.validation.constraints.NotBlank;
 

@@ -8,10 +8,9 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.leovel.gateway.security.services.UserDetailsImpl;
+import com.leovel.gateway.common.models.UserDTO;
 
 import io.jsonwebtoken.*;
 
@@ -42,17 +41,16 @@ public class JwtUtils {
 
 
   //for retrieving any information from token we will need the secret key
-  private Claims getAllClaimsFromToken(String token) {
+  public Claims getAllClaimsFromToken(String token) {
       return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
   }
 
-  public String generateJwtToken(Authentication authentication) {
-
-    UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+  public String generateJwtToken(UserDTO user) {
     
     Map<String, Object> claims = new HashMap<>();
+    claims.put("role", user.getRole());
 
-    return Jwts.builder().setClaims(claims).setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
+    return Jwts.builder().setClaims(claims).setSubject((user.getUsername())).setIssuedAt(new Date())
         .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
         .compact();
   }

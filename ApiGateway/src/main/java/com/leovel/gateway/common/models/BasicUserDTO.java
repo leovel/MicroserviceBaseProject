@@ -1,7 +1,4 @@
-package com.leovel.gateway.security.models;
-
-import java.util.HashSet;
-import java.util.Set;
+package com.leovel.gateway.common.models;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -20,5 +17,5 @@ public class BasicUserDTO {
 	@NotBlank
 	@Email
 	private String email;
-	private Set<RoleDTO> roles = new HashSet<>();
+	private String role;
 }

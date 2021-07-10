@@ -1,12 +1,12 @@
-package com.leovel.userservice.components;
+package com.leovel.gateway.userservice.components;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.leovel.userservice.data.entities.User;
-import com.leovel.userservice.models.BasicUserDTO;
-import com.leovel.userservice.models.UserDTO;
+import com.leovel.gateway.common.models.BasicUserDTO;
+import com.leovel.gateway.common.models.UserDTO;
+import com.leovel.gateway.userservice.data.entities.User;
 
 @Component
 public class MappingComponent {

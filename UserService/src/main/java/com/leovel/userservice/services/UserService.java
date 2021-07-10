@@ -5,10 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.leovel.userservice.common.ERole;
 import com.leovel.userservice.components.MappingComponent;
 import com.leovel.userservice.data.entities.User;
-import com.leovel.userservice.data.repositories.RoleRepository;
 import com.leovel.userservice.data.repositories.UserRepository;
 import com.leovel.userservice.models.*;
 
@@ -18,8 +16,6 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	@Autowired
-	RoleRepository roleRepository;
 	
 	@Autowired
 	MappingComponent mappingComponent;
@@ -74,12 +70,5 @@ public class UserService {
 	
 	public Boolean existsUserByEmail(String email) {
 		return userRepository.existsByEmail(email);
-	}
-	
-	public Optional<RoleDTO> findRoleByName(String name) {
-		return Optional.ofNullable(mappingComponent
-				.mapRoleToDTO(roleRepository
-						.findByName(ERole.valueOf(name))
-						.orElse(null)));
 	}
 }
