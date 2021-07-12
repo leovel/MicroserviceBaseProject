@@ -2,6 +2,16 @@ package com.leovel.gateway.security.payload.request;
 
 import javax.validation.constraints.NotBlank;
 
-public record LoginRequest(
-		@NotBlank String username,
-		@NotBlank String password) { }
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoginRequest {
+	@NotBlank
+	private String username;
+	@NotBlank
+	private String password;
+}

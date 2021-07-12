@@ -1,3 +1,10 @@
 package com.leovel.gateway.security.payload.response;
 
-public record MessageResponse(String message) { }
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MessageResponse { private String message; }

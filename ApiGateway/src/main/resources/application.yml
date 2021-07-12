@@ -3,22 +3,21 @@ spring:
     name: api-gateway
   config:
     import: optional:configserver:http://localhost:8888
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5435/userservicedb
-    username: develop
-    password: G3nt3Bu3na
   cloud:
     gateway:
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
+          
 server:
   port: 8084
+  
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+      
 api:
   gateway:
     jwtExpirationMs: 86400000

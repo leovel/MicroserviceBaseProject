@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.leovel.gateway.common.models.CreateUserDTO;
-import com.leovel.gateway.common.models.Roles;
 import com.leovel.gateway.security.configuration.AuthenticationManager;
-import com.leovel.gateway.userservice.services.UserService;
 import com.leovel.gateway.security.jwt.*;
+import com.leovel.gateway.security.models.CreateUserDTO;
+import com.leovel.gateway.security.models.Roles;
 import com.leovel.gateway.security.payload.request.*;
 import com.leovel.gateway.security.payload.response.*;
 import com.leovel.gateway.security.services.PBKDF2Encoder;
+import com.leovel.gateway.security.userservice.proxy.UserServiceProxy;
 
 import reactor.core.publisher.Mono;
 
@@ -31,7 +31,7 @@ public class AuthController {
 	AuthenticationManager authenticationManager;
 
 	@Autowired
-	UserService userService;
+	UserServiceProxy userServiceProxy;
 
 	@Autowired
 	PBKDF2Encoder encoder;
@@ -41,8 +41,8 @@ public class AuthController {
 
 	@PostMapping("/signin")
 	public Mono<ResponseEntity<JwtResponse>> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-		return userService.findUserByName(loginRequest.username())
-	            .filter(userDetails -> encoder.encode(loginRequest.password()).equals(userDetails.getPassword()))
+		return userServiceProxy.findUserByUserName(loginRequest.getUsername())
+	            .filter(userDetails -> encoder.encode(loginRequest.getPassword()).equals(userDetails.getPassword()))
 	            .map(userDetails -> ResponseEntity.ok(new JwtResponse(
 	            		jwtUtils.generateJwtToken(userDetails),
 	            		userDetails.getFullname())))
@@ -51,12 +51,12 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public Mono<ResponseEntity<MessageResponse>> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		return userService.existsUserByUsername(signUpRequest.username())
+		return userServiceProxy.existsUserByUsername(signUpRequest.getUsername())
 		.filter(existByUsername -> existByUsername)
 		.map(existByUsername ->  ResponseEntity.badRequest()
 				.body(new MessageResponse("Error: Username is already taken!")))
 		.switchIfEmpty(
-				userService.existsUserByEmail(signUpRequest.email())
+				userServiceProxy.existsUserByEmail(signUpRequest.getEmail())
 				.filter(existByEmail -> existByEmail)
 				.map(existByEmail ->  ResponseEntity.badRequest()
 						.body(new MessageResponse("Error: Email is already in use!"))))
@@ -64,15 +64,15 @@ public class AuthController {
 	}
 	
 	private Mono<ResponseEntity<MessageResponse>> tokenResponse(SignupRequest signUpRequest) {
-		var createUserDTO = new CreateUserDTO(encoder.encode(signUpRequest.password()));
-		createUserDTO.setFullname(signUpRequest.fullname());
-		createUserDTO.setEmail(signUpRequest.email());
-		createUserDTO.setUsername(signUpRequest.username());
-		createUserDTO.setRole(StringUtils.hasText(signUpRequest.role()) ?
-				signUpRequest.role() :
+		var createUserDTO = new CreateUserDTO(encoder.encode(signUpRequest.getPassword()));
+		createUserDTO.setFullname(signUpRequest.getFullname());
+		createUserDTO.setEmail(signUpRequest.getEmail());
+		createUserDTO.setUsername(signUpRequest.getUsername());
+		createUserDTO.setRole(StringUtils.hasText(signUpRequest.getRole()) ?
+				signUpRequest.getRole() :
 				Roles.ROLE_USER.name());
 
-		return userService.createUser(createUserDTO).map(user ->
+		return userServiceProxy.createUser(createUserDTO).map(user ->
 		ResponseEntity.ok(new MessageResponse("User " + user.getUsername() + " registered successfully!")));
 	
 	}

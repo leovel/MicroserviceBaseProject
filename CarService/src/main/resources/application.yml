@@ -3,9 +3,8 @@ spring:
   application:
     name: car-service
   config:    import: optional:configserver:http://localhost:8888
-  datasource:    url: jdbc:postgresql://localhost:5433/carservicedb
-    username: develop
-    password: G3nt3Bu3na
+  datasource:    url: jdbc:postgresql://cpds-devops.cpdi.sinse.lan:5434/carservicedb
+    username: postgres    password: Sinse.2018
   jpa:
     properties:      hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

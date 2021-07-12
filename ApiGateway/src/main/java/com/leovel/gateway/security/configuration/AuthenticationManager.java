@@ -25,7 +25,9 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     @SuppressWarnings("unchecked")
     public Mono<Authentication> authenticate(Authentication authentication) {
         String authToken = authentication.getCredentials().toString();
+        
         String username = jwtUtil.getUserNameFromJwtToken(authToken);
+        
         return Mono.just(jwtUtil.validateJwtToken(authToken))
             .filter(valid -> valid)
             .switchIfEmpty(Mono.empty())

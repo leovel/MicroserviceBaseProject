@@ -8,7 +8,6 @@ import com.leovel.carservice.data.entities.Car;
 import com.leovel.carservice.models.CarDTO;
 import com.leovel.carservice.models.CreateCarDTO;
 import com.leovel.carservice.models.FullCarDTO;
-import com.leovel.carservice.models.OfficerDTO;
 import com.leovel.carservice.proxies.OfficerServiceProxy;
 
 @Component
@@ -28,7 +27,7 @@ public class MappingComponent {
 		var fullCar = car == null ? null : modelMapper.map(car, FullCarDTO.class);
 		
 		if(fullCar != null) {
-			fullCar.setOwner(modelMapper.map(officerServiceProxy.findOfficerById(fullCar.getOwnerId()), OfficerDTO.class));
+			fullCar.setOwner(officerServiceProxy.findOfficerById(fullCar.getOwnerId()));
 		}
 		
 		return fullCar;

@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>16</java.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
+		<feign-reactor.version>3.0.3</feign-reactor.version>
 		<jjwt.version>0.11.2</jjwt.version>
 	</properties>
 	<dependencies>
@@ -44,10 +45,25 @@
 			<artifactId>spring-cloud-starter-gateway</artifactId>
 		</dependency>
 		
-		<!-- <dependency>
-		    <groupId>jakarta.xml.bind</groupId>
-		    <artifactId>jakarta.xml.bind-api</artifactId>
-		</dependency> -->
+		<dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-webclient</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-cloud</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-spring-configuration</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-slf4j</artifactId>
+        </dependency>
 		
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
@@ -67,32 +83,11 @@
 			<scope>runtime</scope>
 		</dependency>
 		
-		<dependency>
+		<!-- <dependency>
 		    <groupId>org.springdoc</groupId>
 		    <artifactId>springdoc-openapi-webflux-ui</artifactId>
 		    <version>1.5.9</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.modelmapper</groupId>
-		    <artifactId>modelmapper</artifactId>
-		    <version>2.4.4</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.r2dbc</groupId>
-			<artifactId>r2dbc-postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -115,11 +110,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
-		</dependency> -->
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -129,6 +124,13 @@
 				<version>${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<dependency>
+			    <groupId>com.playtika.reactivefeign</groupId>
+			    <artifactId>feign-reactor-spring-cloud-starter</artifactId>
+			    <version>${feign-reactor.version}</version>
+			    <type>pom</type>
+			    <scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

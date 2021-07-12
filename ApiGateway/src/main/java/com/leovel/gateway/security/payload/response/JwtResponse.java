@@ -1,5 +1,13 @@
 package com.leovel.gateway.security.payload.response;
 
-public record JwtResponse(
-		String accessToken,
-		String fullname) { }
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class JwtResponse {
+	private String accessToken;
+	private String fullname;
+}

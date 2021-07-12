@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.leovel.gateway.common.models.UserDTO;
+import com.leovel.gateway.security.models.UserDTO;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -67,7 +67,7 @@ public class JwtUtils {
     	.build()
     	.parseClaimsJws(authToken);
       return true;
-    } catch (SecurityException e) {
+    } catch (io.jsonwebtoken.security.SecurityException e) {
       logger.error("Invalid JWT signature: {}", e.getMessage());
     } catch (MalformedJwtException e) {
       logger.error("Invalid JWT token: {}", e.getMessage());

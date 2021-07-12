@@ -10,10 +10,15 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
+import com.leovel.gateway.security.jwt.JwtUtils;
+
 import reactor.core.publisher.Mono;
 
 @Component
 public class SecurityContextRepository implements ServerSecurityContextRepository {
+	
+	@Autowired
+    private JwtUtils jwtUtil;
 
 	@Autowired
     private AuthenticationManager authenticationManager;
@@ -27,8 +32,9 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
     public Mono<SecurityContext> load(ServerWebExchange swe) {
         return Mono.justOrEmpty(swe.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
             .filter(authHeader -> authHeader.startsWith("Bearer "))
-            .flatMap(authHeader -> {
-                String authToken = authHeader.substring(7);
+            .map(authHeader -> authHeader.substring(7))
+            .filter(authToken -> jwtUtil.validateJwtToken(authToken))
+            .flatMap(authToken -> {
                 Authentication auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
                 return this.authenticationManager.authenticate(auth).map(SecurityContextImpl::new);
             });

@@ -6,9 +6,9 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
   datasource:
-    url: jdbc:postgresql://localhost:5435/userservicedb
-    username: develop
-    password: G3nt3Bu3na
+    url: jdbc:postgresql://cpds-devops.cpdi.sinse.lan:5434/userservicedb
+    username: postgres
+    password: Sinse.2018
   jpa:
     properties:
       hibernate:
