@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.leovel.gateway.security.models.UserDTO;
+import com.leovel.userservice.models.UserDTO;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.leovel.gateway.security.configuration.AuthenticationManager;
 import com.leovel.gateway.security.jwt.*;
-import com.leovel.gateway.security.models.CreateUserDTO;
-import com.leovel.gateway.security.models.Roles;
 import com.leovel.gateway.security.payload.request.*;
 import com.leovel.gateway.security.payload.response.*;
 import com.leovel.gateway.security.services.PBKDF2Encoder;
 import com.leovel.gateway.security.userservice.proxy.UserServiceProxy;
+import com.leovel.userservice.common.Roles;
+import com.leovel.userservice.models.CreateUserDTO;
 
 import reactor.core.publisher.Mono;
 

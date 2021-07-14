@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.leovel.gateway.security.models.BasicUserDTO;
-import com.leovel.gateway.security.models.CreateUserDTO;
-import com.leovel.gateway.security.models.UpdateUserDTO;
-import com.leovel.gateway.security.models.UserDTO;
+import com.leovel.userservice.models.*;
 
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Mono;
